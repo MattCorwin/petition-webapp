@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body class="container">
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<div th:unless="${individualEmployee}">
+    <div class="form-group">
+        <label th:for="employeeId">Employee</label>
+        <select id="employeeId" name="employeeId">
+            <option th:each="employeeName : ${employees}"
+                    th:value="${employeeName.id}"
+                    th:text="${employeeName.lastName + ' ' + employeeName.firstName}"></option>
+        </select>
+
+
+    </div>
+</div>
+<!-- Todo: after employee is selected, populate a select with dates, then display individual fields for update -->
+
+<span th:text="${successMessage}" class="success"></span>
+<div th:if="${individualEmployee}">
+<form method="post" style="max-width:600px;" th:object="${turnIn}">
+
+
+    <div class="form-group">
+        <label th:for="date">Date</label>
+        <input type="date" min="2019-01-01" class="form-control" th:field="*{date}" />
+        <span th:errors="*{date}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="statedCount">Petitioner's Count</label>
+        <input class="form-control" th:field="*{statedCount}" />
+        <span th:errors="*{statedCount}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="actualCount">Actual Count</label>
+        <input class="form-control" th:field="*{actualCount}" />
+        <span th:errors="*{actualCount}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="validity">Validity</label>
+        <input class="form-control" th:field="*{validity}" />
+        <span th:errors="*{validity}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="perSignaturePayout">Per Signature Payout</label>
+        <input class="form-control" th:field="*{perSignaturePayout}" />
+        <span th:errors="*{perSignaturePayout}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="totalPayout">Total Payout</label>
+        <input class="form-control" th:field="*{totalPayout}" />
+        <span th:errors="*{totalPayout}" class="error"></span>
+    </div>
+
+
+    <input type="submit" value="Submit Turn-in" />
+    <span th:text="${signupError}" class="error"></span>
+</form>
+</div>
+</body>

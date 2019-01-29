@@ -1,7 +1,8 @@
 package com.mattcorwin.petitonwebapp.models;
 
-
-
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +13,28 @@ public class Employee {
     @GeneratedValue
     private int id;
 
+    @NotNull
+    @Size(min=3, max=25, message="Usesrname must be between 3 and 25 characters")
     private String username;
 
+    @NotNull
+    @Size(min=6, max=35, message="Password must be between 6 and 35 characters")
     private String password;
 
+    @NotNull
+    @Size(min=6, max=35, message="")
+    private String passwordRetype;
+
+    @NotNull
+    @Size(min=1, max=35)
     private String firstName;
 
+    @NotNull
+    @Size(min=1, max=35)
     private String lastName;
 
+    @OneToMany
+    @JoinColumn(name = "employee_id")
     private List<TurnIn> TurnIns = new ArrayList<>();
 
     private double accountBalance;
@@ -29,6 +44,14 @@ public class Employee {
     public Employee(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public List<TurnIn> getTurnIns() {
+        return TurnIns;
     }
 
     public String getUsername() {
@@ -73,5 +96,13 @@ public class Employee {
 
     public void addTurnIn(TurnIn turnIn) {
         this.TurnIns.add(turnIn);
+    }
+
+    public String getPasswordRetype() {
+        return passwordRetype;
+    }
+
+    public void setPasswordRetype(String passwordRetype) {
+        this.passwordRetype = passwordRetype;
     }
 }

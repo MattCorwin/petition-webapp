@@ -1,13 +1,24 @@
 package com.mattcorwin.petitonwebapp.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class TurnIn {
 
+    @Id
+    @GeneratedValue
     private int id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
     private int statedCount;
@@ -20,18 +31,23 @@ public class TurnIn {
 
     private double totalPayout;
 
-    private int employeeId;
+    @ManyToOne
+    private Employee employee;
 
     public TurnIn() {}
 
-    public TurnIn(LocalDate date, int statedCount, int actualCount, double validity, double perSignaturePayout, double totalPayout, int employeeId) {
+    public TurnIn(LocalDate date, int statedCount, int actualCount, double validity, double perSignaturePayout, double totalPayout, Employee employee) {
         this.date = date;
         this.statedCount = statedCount;
         this.actualCount = actualCount;
         this.validity = validity;
         this.perSignaturePayout = perSignaturePayout;
         this.totalPayout = totalPayout;
-        this.employeeId = employeeId;
+        this.employee = employee;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public LocalDate getDate() {
@@ -82,10 +98,11 @@ public class TurnIn {
         this.totalPayout = totalPayout;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-
-
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 }

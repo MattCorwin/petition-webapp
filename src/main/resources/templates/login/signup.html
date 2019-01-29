@@ -1,12 +1,50 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8"/>
-    <title></title>
-</head>
-<body>
+<head th:replace="fragments :: head"></head>
+<body class="container">
+<h1 th:text="${title}">Default Title</h1>
 
-    <!-- TODO: Create signup form -->
+<nav th:replace="fragments :: navigation"></nav>
+
+
+    <!-- Creates a new employee -->
+
+    <form method="post" style="max-width:600px;" th:object="${employee}">
+        <div class="form-group">
+            <label th:for="username">Username</label>
+            <input class="form-control" th:field="*{username}" />
+            <span th:errors="*{username}" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label th:for="password">Password</label>
+            <input class="form-control" th:field="*{password}" />
+            <span th:errors="*{password}" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label th:for="passwordRetype">Retype Password</label>
+            <input class="form-control" th:field="*{passwordRetype}" />
+            <span th:errors="*{passwordRetype}" class="error"></span>
+            <span th:text="${noMatch}" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label th:for="firstName">First Name</label>
+            <input class="form-control" th:field="*{firstName}" />
+            <span th:errors="*{firstName}" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label th:for="lastName">Last Name</label>
+            <input class="form-control" th:field="*{lastName}" />
+            <span th:errors="*{lastName}" class="error"></span>
+        </div>
+
+
+
+        <input type="submit" value="Signup" />
+        <span th:text="${signupError}" class="error"></span>
+    </form>
+    <p>Already have an account?
+        <a href="/login">Login Here</a>
+    </p>
 
 </body>
 </html>
