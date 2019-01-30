@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Controller
@@ -65,8 +66,74 @@ public class TurnInController {
     public String displayEditForm(Model model) {
 
         model.addAttribute("employees", employeeDao.findAll());
-        model.addAttribute("title", "Select a petitioner to edit a turn-in");
-        return"turn-in/edit";
+        model.addAttribute("title", "Edit a turn-in");
+        return "turn-in/edit";
     }
+
+    @RequestMapping(value = "edit", method = RequestMethod.POST, params = {"id"})
+    public String processEditForm(@RequestParam int id, Model model) {
+
+        model.addAttribute("title", "Edit a turn-in");
+        model.addAttribute("employees", employeeDao.findAll());
+        Optional<Employee> newEmployee = employeeDao.findById(id);
+        Employee actualEmployee = newEmployee.get();
+        model.addAttribute("selectedEmployee",actualEmployee);
+        return "turn-in/edit";
+    }
+
+
+    @RequestMapping(value = "edit", method = RequestMethod.POST, params = {"id", "dateId"})
+    public String processEditForm(@RequestParam int id, @RequestParam int dateId, Model model) {
+        model.addAttribute("title", "Edit a turn-in");
+        model.addAttribute("employees", employeeDao.findAll());
+        Optional<Employee> newEmployee = employeeDao.findById(id);
+        Employee actualEmployee = newEmployee.get();
+        model.addAttribute("selectedEmployee",actualEmployee);
+        Optional<TurnIn> tempTurnIn = turnInDao.findById(dateId);
+        TurnIn actualTurnIn = tempTurnIn.get();
+        model.addAttribute("selectedTurnIn", actualTurnIn);
+        return "turn-in/edit";
+    }
+
+    @RequestMapping(value = "edit/submit", method = RequestMethod.POST)
+    public String submitEditForm(@ModelAttribute @Valid TurnIn updatedTurnIn, Errors errors, @RequestParam int id, @RequestParam int dateId, Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Edit a turn-in");
+            model.addAttribute("employees", employeeDao.findAll());
+            Optional<Employee> newEmployee = employeeDao.findById(id);
+            Employee actualEmployee = newEmployee.get();
+            model.addAttribute("selectedEmployee",actualEmployee);
+            Optional<TurnIn> tempTurnIn = turnInDao.findById(dateId);
+            TurnIn actualTurnIn = tempTurnIn.get();
+            model.addAttribute("selectedTurnIn", actualTurnIn);
+            return "turn-in/edit";
+        }
+        Optional<Employee> newEmployee = employeeDao.findById(id);
+        if (newEmployee.isPresent()) {
+            Employee actualEmployee = newEmployee.get();
+            updatedTurnIn.setEmployee(actualEmployee);
+            turnInDao.save(updatedTurnIn);
+            turnInDao.deleteById(dateId);
+            model.addAttribute("successMessage", "Turn-in Edited Successfully");
+            model.addAttribute("title", "Enter a new turn-in");
+            model.addAttribute("employees", employeeDao.findAll());
+
+            return "redirect:";
+        }
+
+
+        model.addAttribute("successMessage", "Something went wrong");
+        return "turn-in/edit";
+    }
+//Todo: fix the forward from successful submit, redirect?
+    @RequestMapping(value = "test")
+    public String test(Model model) {
+        Optional<Employee> newEmployee = employeeDao.findById(1);
+        Employee actualEmployee = newEmployee.get();
+        model.addAttribute("employee", actualEmployee);
+        return "turn-in/test";
+    }
+
+
 }
 

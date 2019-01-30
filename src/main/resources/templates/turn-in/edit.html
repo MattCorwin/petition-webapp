@@ -6,25 +6,66 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
-<div th:unless="${individualEmployee}">
-    <div class="form-group">
-        <label th:for="employeeId">Employee</label>
-        <select id="employeeId" name="employeeId">
-            <option th:each="employeeName : ${employees}"
+<form method="post" style="max-width:600px;">
+    <div th:if="${selectedEmployee}" class="form-group">
+        <label th:for="id">Employee</label>
+        <select id="id" name="id" onchange="this.form.submit()">
+            <option value="" disabled>Select an employee</option>
+            <option
+                    th:each="employeeName : ${employees}"
+                    th:value="${employeeName.id}"
+                    th:text="${employeeName.lastName + ' ' + employeeName.firstName}"
+                    th:selected="${employeeName == selectedEmployee}"></option>
+
+        </select>
+        <noscript><input type="submit" value="Submit" /> </noscript>
+
+    </div>
+    <div th:unless="${selectedEmployee}" class="form-group">
+        <label th:for="id">Employee</label>
+        <select id="id" name="id" onchange="this.form.submit()">
+            <option value="" disabled selected>Select an employee</option>
+
+            <option
+                    th:each="employeeName : ${employees}"
                     th:value="${employeeName.id}"
                     th:text="${employeeName.lastName + ' ' + employeeName.firstName}"></option>
         </select>
-
+        <noscript><input type="submit" value="Submit" /> </noscript>
 
     </div>
-</div>
+</form>
 <!-- Todo: after employee is selected, populate a select with dates, then display individual fields for update -->
 
 <span th:text="${successMessage}" class="success"></span>
-<div th:if="${individualEmployee}">
-<form method="post" style="max-width:600px;" th:object="${turnIn}">
 
+<form th:if="${selectedEmployee}" method="post" style="max-width:600px;">
+    <div th:if="${selectedTurnIn}" class="form-group">
+        <label th:for="dateId">Date</label>
+        <select id="dateId" name="dateId" onchange="this.form.submit()">
+            <option value="" disabled>Select a date</option>
+            <option th:each="turnIn : ${selectedEmployee.getTurnIns()}"
+                    th:value="${turnIn.id}"
+                    th:text="${turnIn.date}"
+                    th:selected="${turnIn == selectedTurnIn}"></option>
+        </select>
+        <noscript><input type="submit" value="Submit" /> </noscript>
+        <input type="hidden" name="id" id="id" th:value="${selectedEmployee.id}" />
+    </div>
+    <div th:unless="${selectedTurnIn}"class="form-group">
+        <label th:for="dateId">Date</label>
+        <select id="dateId" name="dateId" onchange="this.form.submit()">
+            <option value="" disabled selected>Select a date</option>
+            <option th:each="turnIn : ${selectedEmployee.getTurnIns()}"
+                    th:value="${turnIn.id}"
+                    th:text="${turnIn.date}"></option>
+        </select>
+        <noscript><input type="submit" value="Submit" /> </noscript>
+        <input type="hidden" name="id" id="id" th:value="${selectedEmployee.id}" />
+    </div>
+</form>
 
+<form th:if="${selectedTurnIn}" method="post" action="/turn-in/edit/submit" style="max-width:600px;" th:object="${selectedTurnIn}">
     <div class="form-group">
         <label th:for="date">Date</label>
         <input type="date" min="2019-01-01" class="form-control" th:field="*{date}" />
@@ -55,10 +96,12 @@
         <input class="form-control" th:field="*{totalPayout}" />
         <span th:errors="*{totalPayout}" class="error"></span>
     </div>
+    <input type="hidden" name="id" id="id" th:value="${selectedEmployee.id}" />
+    <input type="hidden" name="dateId" id="dateId" th:value="${selectedTurnIn.id}" />
 
 
     <input type="submit" value="Submit Turn-in" />
     <span th:text="${signupError}" class="error"></span>
 </form>
-</div>
+
 </body>
