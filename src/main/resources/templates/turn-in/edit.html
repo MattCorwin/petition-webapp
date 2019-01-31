@@ -6,6 +6,8 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
+<span th:text="${successMessage}" class="success"></span>
+
 <form method="post" style="max-width:600px;">
     <div th:if="${selectedEmployee}" class="form-group">
         <label th:for="id">Employee</label>
@@ -35,9 +37,7 @@
 
     </div>
 </form>
-<!-- Todo: after employee is selected, populate a select with dates, then display individual fields for update -->
 
-<span th:text="${successMessage}" class="success"></span>
 
 <form th:if="${selectedEmployee}" method="post" style="max-width:600px;">
     <div th:if="${selectedTurnIn}" class="form-group">
@@ -98,6 +98,7 @@
     </div>
     <input type="hidden" name="id" id="id" th:value="${selectedEmployee.id}" />
     <input type="hidden" name="dateId" id="dateId" th:value="${selectedTurnIn.id}" />
+    <input type="hidden" name="previousTotalPayout" id="previousTotalPayout" th:value="${selectedTurnIn.totalPayout}" />
 
 
     <input type="submit" value="Submit Turn-in" />

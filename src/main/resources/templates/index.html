@@ -8,7 +8,26 @@
 
 <!--TODO: Create a table of turn ins sorted by date, employee total balance at top (maybe with most recent turn in date applied next to total),
 also with a link to petition page-->
-<h1>You made it!</h1>
+<h1 th:text="${'Account Balance: $' + employee.accountBalance}"></h1>
 
+<table class="table">
+
+    <tr>
+        <th>Date</th>
+        <th>Final Petition Count</th>
+        <th>% Validity</th>
+        <th>Per Sig Payout</th>
+        <th>Total Payout</th>
+    </tr>
+
+    <tr th:each="turnIn : ${turnIns}">
+        <td th:text="${turnIn.date}"></td>
+        <td th:text="${turnIn.actualCount}"></td>
+        <td th:text="${turnIn.validity}"></td>
+        <td th:text="${turnIn.perSignaturePayout}"></td>
+        <td th:text="${turnIn.totalPayout}"></td>
+    </tr>
+
+</table>
 </body>
 </html>

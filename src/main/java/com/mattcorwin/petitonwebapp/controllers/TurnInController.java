@@ -52,6 +52,8 @@ public class TurnInController {
             Employee actualEmployee = newEmployee.get();
             turnIn.setEmployee(actualEmployee);
             turnInDao.save(turnIn);
+            actualEmployee.addToAccountBalance(turnIn.getTotalPayout());
+            employeeDao.save(actualEmployee);
             model.addAttribute("successMessage", "Turn-in Submitted Successfully");
             model.addAttribute("title", "Enter a new turn-in");
             model.addAttribute("employees", employeeDao.findAll());
@@ -96,7 +98,8 @@ public class TurnInController {
     }
 
     @RequestMapping(value = "edit/submit", method = RequestMethod.POST)
-    public String submitEditForm(@ModelAttribute @Valid TurnIn updatedTurnIn, Errors errors, @RequestParam int id, @RequestParam int dateId, Model model) {
+    public String submitEditForm(@ModelAttribute @Valid TurnIn updatedTurnIn, Errors errors, @RequestParam int id,
+                                 @RequestParam int dateId, @RequestParam double previousTotalPayout, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Edit a turn-in");
             model.addAttribute("employees", employeeDao.findAll());
@@ -114,25 +117,21 @@ public class TurnInController {
             updatedTurnIn.setEmployee(actualEmployee);
             turnInDao.save(updatedTurnIn);
             turnInDao.deleteById(dateId);
+            double difference = updatedTurnIn.getTotalPayout() - previousTotalPayout;
+            actualEmployee.addToAccountBalance(difference);
+            employeeDao.save(actualEmployee);
             model.addAttribute("successMessage", "Turn-in Edited Successfully");
             model.addAttribute("title", "Enter a new turn-in");
             model.addAttribute("employees", employeeDao.findAll());
 
-            return "redirect:";
+            return "turn-in/edit";
         }
 
 
         model.addAttribute("successMessage", "Something went wrong");
         return "turn-in/edit";
     }
-//Todo: fix the forward from successful submit, redirect?
-    @RequestMapping(value = "test")
-    public String test(Model model) {
-        Optional<Employee> newEmployee = employeeDao.findById(1);
-        Employee actualEmployee = newEmployee.get();
-        model.addAttribute("employee", actualEmployee);
-        return "turn-in/test";
-    }
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.mattcorwin.petitonwebapp.controllers;
 
 import com.mattcorwin.petitonwebapp.models.Employee;
+import com.mattcorwin.petitonwebapp.models.TurnIn;
 import com.mattcorwin.petitonwebapp.models.data.EmployeeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("login")
@@ -52,9 +54,11 @@ public class LoginController {
 
         for (Employee knownEmployee : employeeDao.findAll()) {
             if(employee.getUsername().equals(knownEmployee.getUsername())) {
-                System.out.println("FOUND YOU!");
+
                 if (employee.getPassword().equals(knownEmployee.getPassword())) {
                     model.addAttribute("employee", knownEmployee);
+                    model.addAttribute("turnIns", knownEmployee.getSelectedTurnIns());
+                    model.addAttribute("title", "Account summary for " + knownEmployee.getFirstName() + " " + knownEmployee.getLastName());
                     return "index";
                 }
                 else {
@@ -101,8 +105,12 @@ public class LoginController {
             }
         }
 
+
+
+        model.addAttribute("turnIns", newEmployee.getSelectedTurnIns());
         model.addAttribute("employee", newEmployee);
         employeeDao.save(newEmployee);
+        model.addAttribute("title", "Account summary for " + newEmployee.getFirstName() + " " + newEmployee.getLastName());
 
         return "index";
 

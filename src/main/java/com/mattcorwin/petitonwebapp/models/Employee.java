@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -35,7 +36,7 @@ public class Employee {
 
     @OneToMany
     @JoinColumn(name = "employee_id")
-    private List<TurnIn> TurnIns = new ArrayList<>();
+    private List<TurnIn> turnIns = new ArrayList<>();
 
     private double accountBalance;
 
@@ -51,7 +52,21 @@ public class Employee {
     }
 
     public List<TurnIn> getTurnIns() {
-        return TurnIns;
+        return turnIns;
+    }
+
+    public List<TurnIn> getSelectedTurnIns() {
+        //Todo:sort by date descending
+        if (turnIns.size() < 11) {
+
+            return this.turnIns;
+        }
+        List<TurnIn> selectedTurnIns = new ArrayList<>();
+        for (int i = (turnIns.size() - 1); i > turnIns.size() - 10; i--) {
+
+            selectedTurnIns.add(turnIns.get(i));
+        }
+        return selectedTurnIns;
     }
 
     public String getUsername() {
@@ -90,12 +105,12 @@ public class Employee {
         return accountBalance;
     }
 
-    public void setAccountBalance(double accountBalance) {
-        this.accountBalance = accountBalance;
+    public void addToAccountBalance(double income) {
+        this.accountBalance += income;
     }
 
     public void addTurnIn(TurnIn turnIn) {
-        this.TurnIns.add(turnIn);
+        this.turnIns.add(turnIn);
     }
 
     public String getPasswordRetype() {
