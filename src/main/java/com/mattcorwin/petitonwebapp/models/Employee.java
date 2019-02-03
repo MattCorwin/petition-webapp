@@ -38,6 +38,10 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private List<TurnIn> turnIns = new ArrayList<>();
 
+    @OneToMany
+    @JoinColumn(name = "employee_id")
+    private List<Comment> comments = new ArrayList<>();
+
     private double accountBalance;
 
     public Employee() {}
@@ -53,6 +57,10 @@ public class Employee {
 
     public List<TurnIn> getTurnIns() {
         return turnIns;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
     }
 
     public List<TurnIn> getSelectedTurnIns() {
@@ -111,6 +119,10 @@ public class Employee {
 
     public void addTurnIn(TurnIn turnIn) {
         this.turnIns.add(turnIn);
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 
     public String getPasswordRetype() {
