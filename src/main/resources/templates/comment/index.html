@@ -24,8 +24,8 @@
         <span th:errors="*{type}" class="error"></span>
     </div>
     <div class="form-group">
-        <label th:for="commentText"></label>
-        <textarea rows="4" cols="80" th:name="*{commentText}" th:id="*{commentText}">Enter your comment here</textarea>
+        <label th:for="commentText">Comment:</label>
+        <textarea rows="4" cols="80" th:field="*{commentText}">Enter your comment here</textarea>
         <span th:errors="*{commentText}" class="error"></span>
     </div>
 
