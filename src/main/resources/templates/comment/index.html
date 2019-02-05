@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 <body class="container">
-<h1 th:text="${title}">Default Title</h1>
+<h1 th:replace="fragments :: pageTitle">Default Title</h1>
+
 
 <nav th:replace="fragments :: navigation"></nav>
 
@@ -29,7 +30,7 @@
         <span th:errors="*{commentText}" class="error"></span>
     </div>
 
-    <input type="submit" value="Submit Comment" />
+    <input type="submit" value="Submit Comment" class="margin-top"/>
 
 </form>
 

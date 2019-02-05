@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 <body class="container">
-<h1 th:text="${title}">Default Title</h1>
+<h1 th:replace="fragments :: pageTitle">Default Title</h1>
 
 <nav th:replace="fragments :: navigation"></nav>
 
@@ -101,7 +101,7 @@
     <input type="hidden" name="previousTotalPayout" id="previousTotalPayout" th:value="${selectedTurnIn.totalPayout}" />
 
 
-    <input type="submit" value="Submit Turn-in" />
+    <input type="submit" value="Submit Turn-in" class="margin-top"/>
     <span th:text="${signupError}" class="error"></span>
 </form>
 

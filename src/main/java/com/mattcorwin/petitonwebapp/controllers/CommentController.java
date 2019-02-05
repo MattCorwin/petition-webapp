@@ -28,6 +28,7 @@ public class CommentController {
     @Autowired
     private CommentDao commentDao;
 
+    //Accept GET request on /comment, display form with a select, the values for which come from the commentTypes enum
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String displayCommentForm(Model model) {
         model.addAttribute("title", "Contact Us");
@@ -36,6 +37,8 @@ public class CommentController {
         return "comment/index";
     }
 
+    //Create a comment object if there are no errors, find the employee associated with the current username, add the current date,
+    //and save the comment to the data access object
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String processCommentForm(@ModelAttribute @Valid Comment comment, Errors errors, @RequestParam String username, Model model) {
 

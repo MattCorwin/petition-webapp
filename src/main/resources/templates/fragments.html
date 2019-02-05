@@ -11,14 +11,14 @@
 
 </head>
 <body>
+<h1 th:fragment="pageTitle" th:text="${title}" class="centered">Default Title</h1>
 
-//TODO: FIX NAV MENU
-
-<nav th:fragment="navigation">
+<nav th:fragment="navigation" class="centered margin-bottom">
     <a href="/login">Login</a> |
     <a href="/login/signup">Signup</a> |
     <a href="/turn-in/add">Add a turn-in</a> |
-    <a href="/turn-in/edit">Edit a turn-in</a>
+    <a href="/turn-in/edit">Edit a turn-in</a> |
+    <a href="/comment">Contact us</a>
 </nav>
 
 </body>

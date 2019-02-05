@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 <body class="container">
-<h1 th:text="${title}">Default Title</h1>
+<h1 th:replace="fragments :: pageTitle">Default Title</h1>
 
 <nav th:replace="fragments :: navigation"></nav>
 
@@ -39,10 +39,10 @@
 
 
 
-        <input type="submit" value="Signup" />
+        <input type="submit" value="Signup" class="margin-top"/>
         <span th:text="${signupError}" class="error"></span>
     </form>
-    <p>Already have an account?
+    <p class="margin-top">Already have an account?
         <a href="/login">Login Here</a>
     </p>
 

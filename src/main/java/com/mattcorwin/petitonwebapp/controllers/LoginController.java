@@ -31,12 +31,11 @@ public class LoginController {
     }
 
     //LOGIN POST REQUEST, verify login data by CREATING NEW VALID EMPLOYEE OBJECT, pass to main screen
-    //Todo: figure out hashing
+    //Todo: implement password hashing
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String processLogin(@ModelAttribute @Valid Employee employee, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
-            System.out.println("FOUND ERRORS!!!!");
             model.addAttribute("title", "Login");
             model.addAttribute("employee", employee);
             if (!employee.getPassword().equals(employee.getPasswordRetype())) {
@@ -116,7 +115,5 @@ public class LoginController {
 
     }
 }
-//todo: create landing page for employee
-//todo:create admin route/landing page
-//todo: create comment round/page
-//todo: create turnin route/page for admins
+
+

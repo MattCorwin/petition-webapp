@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
@@ -18,11 +20,14 @@ public class Comment {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
+    @NotNull
+    @Size(min=10, max=500)
     private String commentText;
 
     @ManyToOne
     private Employee employee;
 
+    @NotNull
     private CommentTypes type;
 
     public Comment() {
