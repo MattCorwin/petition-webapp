@@ -14,6 +14,10 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Matt Corwin
+ * This class contains methods to process user login
+ */
 @Controller
 @RequestMapping("login")
 public class LoginController {
@@ -21,7 +25,11 @@ public class LoginController {
     @Autowired
     private EmployeeDao employeeDao;
 
-    //LOGIN GET REQUEST
+    /**
+     * This route handler displays the login form
+     * @param model used to add attributes to the thymeleaf template
+     * @return returns login/index.html, displaying the login form
+     */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String displayLogin(Model model) {
         model.addAttribute("title", "Login");
@@ -30,7 +38,13 @@ public class LoginController {
 
     }
 
-    //LOGIN POST REQUEST, verify login data by CREATING NEW VALID EMPLOYEE OBJECT, pass to main screen
+    /**
+     * This route handler processes the login form POST request, creates new employee object
+     * @param employee created from form through model binding
+     * @param errors contains any errors generated via model binding
+     * @param model used to add attributes to the thymeleaf template
+     * @return returns /index.html if there are no errors, otherwise returns login/index.html
+     */
     //Todo: implement password hashing
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String processLogin(@ModelAttribute @Valid Employee employee, Errors errors, Model model) {
@@ -71,6 +85,11 @@ public class LoginController {
         return "login/index";
     }
 
+    /**
+     * Displays the signup form
+     * @param model used to add attributes to the thymeleaf template
+     * @return returns login/signup.html
+     */
     @RequestMapping(value="signup", method = RequestMethod.GET)
     public String displaySignup(Model model) {
         model.addAttribute("title", "Signup for an account");
@@ -78,7 +97,13 @@ public class LoginController {
         return"login/signup";
     }
 
-
+    /**
+     * Processes the signup form POST request if there are no errors
+     * @param newEmployee new Employee generated from form data by model binding
+     * @param errors contains any errors generated during model binding
+     * @param model used to add attributes to the thymeleaf template
+     * @return returns /index.html if no errors in signup process, otherwise re-displays login/signup.html
+     */
     @RequestMapping(value="signup", method = RequestMethod.POST)
     public String processSignup(@ModelAttribute @Valid Employee newEmployee, Errors errors, Model model) {
         if (errors.hasErrors()) {

@@ -6,7 +6,9 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
-<span th:text="${successMessage}" class="success"></span>
+<div th:if="${successMessage}" class="alert alert-success centered fade-out" role="alert">
+    <span th:text="${successMessage}" class="success"></span>
+</div>
 <form method="post" style="max-width:600px;" th:object="${turnIn}">
     <div class="form-group">
         <label th:for="employeeId">Employee</label>

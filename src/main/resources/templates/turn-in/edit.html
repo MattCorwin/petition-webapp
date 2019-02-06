@@ -6,8 +6,9 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
-<span th:text="${successMessage}" class="success"></span>
-
+<div th:if="${successMessage}" class="alert alert-success centered fade-out" role="alert">
+    <span th:text="${successMessage}" class="success"></span>
+</div>
 <form method="post" style="max-width:600px;">
     <div th:if="${selectedEmployee}" class="form-group">
         <label th:for="id">Employee</label>
@@ -102,7 +103,7 @@
 
 
     <input type="submit" value="Submit Turn-in" class="margin-top"/>
-    <span th:text="${signupError}" class="error"></span>
+    <span th:text="${editError}" class="error"></span>
 </form>
 
 </body>

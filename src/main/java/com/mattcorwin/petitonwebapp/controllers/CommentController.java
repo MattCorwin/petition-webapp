@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import java.time.LocalDate;
 
+/**
+ * @author Matt Corwin
+ * This class contains methods that display and process a comment form
+ */
 @Controller
 @RequestMapping("comment")
 public class CommentController {
@@ -28,7 +32,11 @@ public class CommentController {
     @Autowired
     private CommentDao commentDao;
 
-    //Accept GET request on /comment, display form with a select, the values for which come from the commentTypes enum
+    /**
+     * This route handler accepts the initial GET request and displays the comment form
+     * @param model used to add attributes to the thymeleaf template
+     * @return returns the comment/index.html file, which is the comment form
+     */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String displayCommentForm(Model model) {
         model.addAttribute("title", "Contact Us");
@@ -37,8 +45,14 @@ public class CommentController {
         return "comment/index";
     }
 
-    //Create a comment object if there are no errors, find the employee associated with the current username, add the current date,
-    //and save the comment to the data access object
+    /**
+     * Creates a new comment object and saves it to the database if there are no errors
+     * @param comment is the comment object created from the form data
+     * @param errors any potential errors from the model binding process
+     * @param username username passed by the form
+     * @param model used to add attributes to the thymeleaf template
+     * @return
+     */
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String processCommentForm(@ModelAttribute @Valid Comment comment, Errors errors, @RequestParam String username, Model model) {
 
