@@ -5,6 +5,8 @@ import com.mattcorwin.petitonwebapp.models.TurnIn;
 import com.mattcorwin.petitonwebapp.models.data.EmployeeDao;
 import com.mattcorwin.petitonwebapp.models.data.TurnInDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -38,7 +39,9 @@ public class TurnInController {
      */
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayTurnInForm(Model model) {
-
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Employee employee = employeeDao.findByUsername(auth.getName());
+        model.addAttribute("name", employee.getUsername());
         model.addAttribute("title", "Enter a new turn-in");
         model.addAttribute("employees", employeeDao.findAll());
         model.addAttribute(new TurnIn());

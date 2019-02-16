@@ -1,11 +1,12 @@
 package com.mattcorwin.petitonwebapp.models;
 
+import javax.persistence.Id;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Employee {
@@ -19,11 +20,11 @@ public class Employee {
     private String username;
 
     @NotNull
-    @Size(min=6, max=35, message="Password must be between 6 and 35 characters")
+    @Size(min=6, max=61, message="Password must be between 6 and 35 characters")
     private String password;
 
     @NotNull
-    @Size(min=6, max=35, message="")
+    @Size(min=6, max=61, message="")
     private String passwordRetype;
 
     @NotNull
@@ -43,6 +44,12 @@ public class Employee {
     private List<Comment> comments = new ArrayList<>();
 
     private double accountBalance;
+
+    private int active;
+
+    @ManyToMany
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     public Employee() {}
 
@@ -131,5 +138,21 @@ public class Employee {
 
     public void setPasswordRetype(String passwordRetype) {
         this.passwordRetype = passwordRetype;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

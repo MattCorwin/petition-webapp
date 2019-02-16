@@ -7,34 +7,25 @@
 <nav th:replace="fragments :: navigation"></nav>
 
 
-<!--Displays the initial login form with a link to the sign-up form-->
 
-<form method="post" style="max-width:600px;" th:object="${employee}">
-    <div class="form-group">
-        <label th:for="username">Username</label>
-        <input class="form-control" th:field="*{username}" />
-        <span th:errors="*{username}" class="error"></span>
-    </div>
-    <div class="form-group">
-        <label th:for="password">Password</label>
-        <input class="form-control" th:field="*{password}" />
-        <span th:errors="*{password}" class="error"></span>
-    </div>
-    <div class="form-group">
-        <label th:for="passwordRetype">Retype Password</label>
-        <input class="form-control" th:field="*{passwordRetype}" />
-        <span th:errors="*{passwordRetype}" class="error"></span>
-        <span th:text="${noMatch}" class="error"></span>
 
-    </div>
-    <input type="hidden" name="firstName" id="firstName" value="placeholder" />
-    <input type="hidden" name="lastName" id="lastName" value="placeholder" />
-    <input type="submit" value="Login" class="margin-top"/>
-    <span th:text="${loginError}" class="error"></span>
+<div class="container">
 
-</form>
-    <p class="margin-top">Don't have an account?
-        <a href="/login/signup">Sign-up Here</a>
-    </p>
+    <form th:action="@{/login}" method="POST" class="form-signin">
+        <h3 class="form-signin-heading" th:text="Welcome"></h3>
+        <br/>
+
+        <input type="text" id="username" name="username" th:placeholder="Username"
+               class="form-control"/> <br/>
+        <input type="password" th:placeholder="Password"
+               id="password" name="password" class="form-control"/> <br/>
+
+        <div align="center" th:if="${param.error}">
+            <p style="font-size: 20; color: #FF1C19;">Email or Password invalid, please verify</p>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit"
+                th:text="Login"></button>
+    </form>
+</div>
 </body>
 </html>

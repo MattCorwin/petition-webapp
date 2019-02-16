@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
     <meta charset="UTF-8"/>
     <title th:text="${title}">Default Title</title>
@@ -9,6 +9,7 @@
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" th:src="@{/js/script.js}"></script>
 
+
 </head>
 <body>
 <h1 th:fragment="pageTitle" th:text="${title}" class="centered">Default Title</h1>
@@ -16,9 +17,14 @@
 <nav th:fragment="navigation" class="centered margin-bottom">
     <a href="/login">Login</a> |
     <a href="/login/signup">Signup</a> |
-    <a href="/turn-in/add">Add a turn-in</a> |
-    <a href="/turn-in/edit">Edit a turn-in</a> |
-    <a href="/comment">Contact us</a>
+    <a href="/comment">Contact us</a> |
+    <a href="/logout">Logout</a>
+    <br/>
+    <div sec:authorize="hasAuthority('ADMIN')">
+        <a href="/turn-in/add">Add a turn-in</a> |
+        <a href="/turn-in/edit">Edit a turn-in</a>
+    </div>
+
 </nav>
 
 </body>

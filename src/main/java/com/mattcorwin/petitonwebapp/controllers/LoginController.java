@@ -1,9 +1,12 @@
 package com.mattcorwin.petitonwebapp.controllers;
 
+
+
 import com.mattcorwin.petitonwebapp.models.Employee;
-import com.mattcorwin.petitonwebapp.models.TurnIn;
+import com.mattcorwin.petitonwebapp.models.UserService;
 import com.mattcorwin.petitonwebapp.models.data.EmployeeDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -11,8 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Matt Corwin
@@ -24,6 +25,11 @@ public class LoginController {
 
     @Autowired
     private EmployeeDao employeeDao;
+
+    @Autowired
+    private UserService userService;
+
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
      * This route handler displays the login form
@@ -46,7 +52,7 @@ public class LoginController {
      * @return returns /index.html if there are no errors, otherwise returns login/index.html
      */
     //Todo: implement password hashing
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    /*@RequestMapping(value = "", method = RequestMethod.POST)
     public String processLogin(@ModelAttribute @Valid Employee employee, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
@@ -64,7 +70,7 @@ public class LoginController {
             model.addAttribute("employee", employee);
             return "login/index";
         }
-
+        employee.setPassword(bCryptPasswordEncoder.encode(employee.getPassword()));
         for (Employee knownEmployee : employeeDao.findAll()) {
             if(employee.getUsername().equals(knownEmployee.getUsername())) {
 
@@ -72,7 +78,7 @@ public class LoginController {
                     model.addAttribute("employee", knownEmployee);
                     model.addAttribute("turnIns", knownEmployee.getSelectedTurnIns());
                     model.addAttribute("title", "Account summary for " + knownEmployee.getFirstName() + " " + knownEmployee.getLastName());
-                    return "index";
+                    return "/user/index";
                 }
                 else {
                     model.addAttribute("loginError", "Incorrect Password");
@@ -84,7 +90,7 @@ public class LoginController {
 
         return "login/index";
     }
-
+*/
     /**
      * Displays the signup form
      * @param model used to add attributes to the thymeleaf template
@@ -133,12 +139,19 @@ public class LoginController {
 
         model.addAttribute("turnIns", newEmployee.getSelectedTurnIns());
         model.addAttribute("employee", newEmployee);
-        employeeDao.save(newEmployee);
+        userService.saveEmployee(newEmployee);
         model.addAttribute("title", "Account summary for " + newEmployee.getFirstName() + " " + newEmployee.getLastName());
 
-        return "index";
+        return "/user/index";
 
     }
-}
 
+    @RequestMapping(value="access-denied")
+    public String accessDenied(Model model) {
+        return "/login/access-denied";
+    }
+
+
+
+}
 
