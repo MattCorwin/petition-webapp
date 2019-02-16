@@ -4,9 +4,12 @@ package com.mattcorwin.petitonwebapp.controllers;
 import com.mattcorwin.petitonwebapp.models.Comment;
 import com.mattcorwin.petitonwebapp.models.CommentTypes;
 import com.mattcorwin.petitonwebapp.models.Employee;
+import com.mattcorwin.petitonwebapp.models.UserService;
 import com.mattcorwin.petitonwebapp.models.data.CommentDao;
 import com.mattcorwin.petitonwebapp.models.data.EmployeeDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -32,6 +35,9 @@ public class CommentController {
     @Autowired
     private CommentDao commentDao;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * This route handler accepts the initial GET request and displays the comment form
      * @param model used to add attributes to the thymeleaf template
@@ -39,6 +45,7 @@ public class CommentController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String displayCommentForm(Model model) {
+
         model.addAttribute("title", "Contact Us");
         model.addAttribute("commentTypes", CommentTypes.values());
         model.addAttribute(new Comment());
@@ -49,12 +56,11 @@ public class CommentController {
      * Creates a new comment object and saves it to the database if there are no errors
      * @param comment is the comment object created from the form data
      * @param errors any potential errors from the model binding process
-     * @param username username passed by the form
      * @param model used to add attributes to the thymeleaf template
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String processCommentForm(@ModelAttribute @Valid Comment comment, Errors errors, @RequestParam String username, Model model) {
+    public String processCommentForm(@ModelAttribute @Valid Comment comment, Errors errors, Model model) {
 
         model.addAttribute("title", "Contact us");
         model.addAttribute("commentTypes", CommentTypes.values());
@@ -62,21 +68,17 @@ public class CommentController {
         if (errors.hasErrors()) {
             model.addAttribute("comment", comment);
             model.addAttribute("commentTypes", CommentTypes.values());
-            model.addAttribute("username", username);
 
             return "comment/index";
         }
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Employee employee = userService.findUserByUsername(auth.getName());
+        comment.setEmployee(employee);
+        comment.setDate(LocalDate.now());
+        commentDao.save(comment);
+        model.addAttribute("successMessage", "Comment submitted successfully");
 
-        for (Employee knownEmployee : employeeDao.findAll()) {
-            if(username.equals(knownEmployee.getUsername())) {
-                comment.setEmployee(knownEmployee);
-                comment.setDate(LocalDate.now());
-                commentDao.save(comment);
-                model.addAttribute("successMessage", "Comment submitted successfully");
-                return "comment/index";
-            }
-        }
         return "comment/index";
     }
 
