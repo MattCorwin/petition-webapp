@@ -24,10 +24,6 @@ public class Employee {
     private String password;
 
     @NotNull
-    @Size(min=6, max=61, message="")
-    private String passwordRetype;
-
-    @NotNull
     @Size(min=1, max=35)
     private String firstName;
 
@@ -130,14 +126,6 @@ public class Employee {
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
-    }
-
-    public String getPasswordRetype() {
-        return passwordRetype;
-    }
-
-    public void setPasswordRetype(String passwordRetype) {
-        this.passwordRetype = passwordRetype;
     }
 
     public int getActive() {
