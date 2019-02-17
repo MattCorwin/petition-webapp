@@ -13,4 +13,3 @@ public class PetitonWebappApplication {
 }
 
 //Todo: update layout/styling
-//Todo: refactor comment form to use stored username

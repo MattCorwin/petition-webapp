@@ -15,6 +15,7 @@
 <h1 th:fragment="pageTitle" th:text="${title}" class="centered">Default Title</h1>
 
 <nav th:fragment="navigation" class="centered margin-bottom">
+    <span sec:authorize="isAuthenticated()"><a href="/user">Home</a> |</span>
     <a href="/login">Login</a> |
     <a href="/login/signup">Signup</a> |
     <a href="/comment">Contact us</a> |

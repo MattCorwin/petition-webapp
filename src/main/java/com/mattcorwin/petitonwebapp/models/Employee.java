@@ -4,7 +4,9 @@ import javax.persistence.Id;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -66,20 +68,41 @@ public class Employee {
         return comments;
     }
 
-    public List<TurnIn> getSelectedTurnIns() {
-        //Todo:sort by date descending
-        if (turnIns.size() < 11) {
+    //Selects
+    public TurnIn[] getSelectedTurnIns() {
 
-            return this.turnIns;
-        }
-        List<TurnIn> selectedTurnIns = new ArrayList<>();
-        for (int i = (turnIns.size() - 1); i > turnIns.size() - 10; i--) {
+        TurnIn[] array = sortTurnIns(this.turnIns);
 
-            selectedTurnIns.add(turnIns.get(i));
+        if (array.length < 11) {
+            return array;
         }
-        return selectedTurnIns;
+
+        return Arrays.copyOfRange(array, 0, 10);
     }
 
+    //Performs converts turnIns to array and performs an insertion sort
+    public TurnIn[] sortTurnIns(List<TurnIn> turnIns) {
+
+        if(turnIns != null) {
+
+            TurnIn[] array = new TurnIn[turnIns.size()];
+            array = turnIns.toArray(array);
+
+            for (int i = 1; i < turnIns.size(); i++) {
+
+                TurnIn key = array[i];
+                int j = i -1;
+
+                while (j >= 0 && array[j].getDate().isBefore(key.getDate())) {
+                    array[j + 1] = array[j];
+                    j = j -1;
+                }
+                array[j+1] = key;
+            }
+            return array;
+        }
+        return null;
+    }
     public String getUsername() {
         return username;
     }
